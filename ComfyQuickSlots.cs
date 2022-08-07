@@ -455,12 +455,13 @@ namespace ComfyQuickSlots {
 
         public static bool MoveArmorItemToSlot(Humanoid humanoid, ItemDrop.ItemData item, int x, int y) {
             ItemDrop.ItemData itemInArmorSlot = humanoid.GetInventory().GetItemAt(x, y);
-            if(itemInArmorSlot != null) {
+            if(itemInArmorSlot != null && !itemInArmorSlot.Equals(item)) {
                 return SwapArmorItems(humanoid, item, itemInArmorSlot, x, y);
             } else {
                 item.m_gridPos = new Vector2i(x, y);
-                if(!humanoid.GetInventory().m_inventory.Contains(item)) {
+                if (!humanoid.GetInventory().m_inventory.Contains(item)) {
                     humanoid.GetInventory().AddItem(item);
+                    humanoid.GetInventory().Changed();
                     return true;
                 }
             }

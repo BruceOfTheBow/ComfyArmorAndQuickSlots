@@ -50,27 +50,33 @@ namespace ComfyQuickSlots {
             ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}");
             Vector2i loc = new Vector2i(x, y);
             if (__instance.m_name == "Inventory") {
-                if(x < 5 && y == 4) {
+                if (item.m_equiped && ComfyQuickSlots.isArmor(item)) {
+                    ComfyQuickSlots.UnequipItem(Player.m_localPlayer, item);
+                    Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(item);
+                    if(x == armorSlot.x && y == armorSlot.y) {
+                        return true;
+                    }
                     return false;
                 }
-                if(item.m_equiped) {
+                if (x < 5 && y == 4) {
                     return false;
                 }
+                
             }          
             return true;
         }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(Inventory), "MoveItemToThis", typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
-        //public static bool MoveItemToThisPrefix(Inventory __instance, ref bool __result, Inventory fromInventory, ItemDrop.ItemData item, int amount, int x, int y) {
-        //    if(__instance.m_name.Equals("Inventory")) {
-        //        if(x < 5 && y ==4) {
-        //            return false;
-        //        }
-        //    }
-        //    ComfyQuickSlots.log($"Moving {item.m_shared.m_name} from {item.m_gridPos.x},{item.m_gridPos.y} in {fromInventory.m_name} to {x},{y} {__instance.m_name}");
-        //    return true;
-        //}
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Inventory), "MoveItemToThis", typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
+        public static bool MoveItemToThisPrefix(Inventory __instance, ref bool __result, Inventory fromInventory, ItemDrop.ItemData item, int amount, int x, int y) {
+            if(__instance.m_name.Equals("Inventory")) {
+                if(x < 5 && y ==4) {
+                    return false;
+                }
+            }
+            ComfyQuickSlots.log($"Moving {item.m_shared.m_name} from {item.m_gridPos.x},{item.m_gridPos.y} in {fromInventory.m_name} to {x},{y} {__instance.m_name}");
+            return true;
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Inventory), "MoveItemToThis", typeof(Inventory), typeof(ItemDrop.ItemData))]

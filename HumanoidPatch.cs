@@ -23,12 +23,16 @@ namespace ComfyQuickSlots {
                         ComfyQuickSlots.log($"Armor item already equipped. Swapping {item.m_shared.m_name} for {swapItem.m_shared.m_name}");
                         ComfyQuickSlots.EquipItem(__instance, item);
                         ComfyQuickSlots.MoveArmorItemToSlot(__instance, item, armorSlot.x, armorSlot.y);
+                        __result = true;
                         return false;
                     }
                 }
                 ComfyQuickSlots.log($"Equipping item {item.m_shared.m_name}");
                 ComfyQuickSlots.EquipItem(__instance, item);
-                ComfyQuickSlots.MoveArmorItemToSlot(__instance, item, armorSlot.x, armorSlot.y);
+                if(!(item.m_gridPos.x == armorSlot.x && item.m_gridPos.y == armorSlot.y)) {
+                    ComfyQuickSlots.MoveArmorItemToSlot(__instance, item, armorSlot.x, armorSlot.y);
+                }
+                __result = true;
                 return false;
             }
             return true;
@@ -36,17 +40,19 @@ namespace ComfyQuickSlots {
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Humanoid), "EquipItem")]
-
         public static void EquipItemPostfix(Humanoid __instance, bool __result, ItemDrop.ItemData item) {
-            ComfyQuickSlots.log("Item equipped.");
+            ComfyQuickSlots.log($"Item equipped {item.m_equiped}");
+            __instance.GetInventory().Changed();
         }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Humanoid), "UnequipItem")]
         public static bool UnequipItemPrefix(Humanoid __instance, ItemDrop.ItemData item, bool triggerEquipEffects) {
             if (item != null) {
-                if (ComfyQuickSlots.isArmor(item)) {
+                if (ComfyQuickSlots.isArmor(item) && item.m_equiped) {
                     if (!ComfyQuickSlots.HaveEmptyInventorySlot(__instance.GetInventory())) {
                         ComfyQuickSlots.log("No empty slots found. Will not unequip item.");
+                        __instance.Message(MessageHud.MessageType.Center, "Inventory full. Item not unequipped.");
                         return false;
                     }
                     ComfyQuickSlots.log("Unequipping item.");
