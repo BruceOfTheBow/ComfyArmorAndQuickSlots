@@ -26,7 +26,7 @@ namespace ComfyQuickSlots {
         Harmony _harmony;
         public static ConfigEntry<bool> isModEnabled;
 
-        private static bool _debug = false;
+        private static bool _debug = true;
 
         static Assembly assem = typeof(ComfyQuickSlots).Assembly;
         public static string fpath = assem.Location;
@@ -55,6 +55,9 @@ namespace ComfyQuickSlots {
         public static Vector2i utilitySlot = new Vector2i(4, 4);
 
         public static List<Vector2i> armorSlots = new List<Vector2i>() { helmetSlot, chestSlot, legsSlot, shoulderSlot, utilitySlot };
+
+        public static bool firstLoad = false;
+        public static List<ItemDrop.ItemData> initialEquippedArmor = new List<ItemDrop.ItemData>();
 
         public void Awake() {
             isModEnabled = Config.Bind<bool>("_Global", "isModEnabled", true, "Enable or disable this mod.");
@@ -400,6 +403,11 @@ namespace ComfyQuickSlots {
             humanoid.TriggerEquipEffect(item);
         }
 
+        public static void EquipAndAddItem(Humanoid humanoid, ItemDrop.ItemData item) {
+            humanoid.m_inventory.AddItem(item);
+            EquipItem(humanoid, item);           
+        }
+
         public static bool isArmorTypeEquipped(Humanoid humanoid, ItemDrop.ItemData item) {
             ItemDrop.ItemData armorItem = null;
             if (item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Helmet) {
@@ -505,6 +513,24 @@ namespace ComfyQuickSlots {
                 }
             }
             return true;
+        }
+
+        public static void GetAllArmorFirst(Player player) {
+            if(player.m_helmetItem != null) {
+                initialEquippedArmor.Add(player.m_helmetItem);
+            }
+            if(player.m_chestItem != null) {
+                initialEquippedArmor.Add(player.m_chestItem);
+            }
+            if(player.m_legItem != null) {
+                initialEquippedArmor.Add(player.m_legItem);
+            }
+            if(player.m_shoulderItem != null) {
+                initialEquippedArmor.Add(player.m_shoulderItem);
+            }
+            if(player.m_utilityItem != null) {
+                initialEquippedArmor.Add(player.m_utilityItem);
+            }
         }
     }
 }

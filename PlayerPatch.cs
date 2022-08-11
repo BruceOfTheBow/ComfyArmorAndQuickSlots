@@ -14,6 +14,10 @@ namespace ComfyQuickSlots {
         [HarmonyPatch(typeof(Player), "Awake")]
         public static void PlayerAwakePrefix(ref Player __instance) {
             __instance.m_inventory = new Inventory("ComfyQuickSlotsInventory", null, ComfyQuickSlots.columns, ComfyQuickSlots.rows);
+            if (!__instance.m_knownTexts.ContainsKey(playerDataKey)) {
+                ComfyQuickSlots.log($"Initial load of ComfyQuickSlots. Checking for initial equipped armor pieces.");
+                ComfyQuickSlots.firstLoad = true;
+            }
         }
 
         [HarmonyPostfix]
@@ -24,6 +28,17 @@ namespace ComfyQuickSlots {
                 ZPackage pkg = new ZPackage(__instance.m_knownTexts[playerDataKey]);
                 __instance.GetInventory().Load(pkg);
                 ComfyQuickSlots.EquipArmorInArmorSlots(__instance);
+            } else {
+                ComfyQuickSlots.log($"Adding and equipping armor on first load of Comfy Quick Slots.{ComfyQuickSlots.firstLoad}");
+                foreach(ItemDrop.ItemData armorPiece in ComfyQuickSlots.initialEquippedArmor) {
+                    ComfyQuickSlots.log($"Equipping {armorPiece.m_shared.m_name} and moving to armor slot on initial load.");
+                    ComfyQuickSlots.UnequipItem(__instance, armorPiece);
+                    __instance.GetInventory().AddItem(armorPiece);
+                    __instance.EquipItem(armorPiece);
+                    Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(armorPiece);
+                    ComfyQuickSlots.MoveArmorItemToSlot(__instance, armorPiece, armorSlot.x, armorSlot.y);
+                }
+                ComfyQuickSlots.firstLoad = false;
             }
         }
 

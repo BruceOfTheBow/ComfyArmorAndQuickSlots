@@ -31,6 +31,7 @@ namespace ComfyQuickSlots {
                 ComfyQuickSlots.EquipItem(__instance, item);
                 if(!(item.m_gridPos.x == armorSlot.x && item.m_gridPos.y == armorSlot.y)) {
                     ComfyQuickSlots.MoveArmorItemToSlot(__instance, item, armorSlot.x, armorSlot.y);
+                    ComfyQuickSlots.log($"Moving armor to item slot {armorSlot.x},{armorSlot.y}");
                 }
                 __result = true;
                 return false;
