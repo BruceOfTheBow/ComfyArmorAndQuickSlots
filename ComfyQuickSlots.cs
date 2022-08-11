@@ -26,7 +26,7 @@ namespace ComfyQuickSlots {
         Harmony _harmony;
         public static ConfigEntry<bool> isModEnabled;
 
-        private static bool _debug = true;
+        private static bool _debug = false;
 
         static Assembly assem = typeof(ComfyQuickSlots).Assembly;
         public static string fpath = assem.Location;
@@ -113,15 +113,6 @@ namespace ComfyQuickSlots {
                     }
 
                 }
-            }
-        }
-
-        [HarmonyPatch(typeof(Player))]
-        public static class GridExtension {
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(Player), "Awake")]
-            public static void PlayerAwakePrefix(ref Player __instance) {
-                __instance.m_inventory = new Inventory("Inventory", null, columns, rows);
             }
         }
 
@@ -495,6 +486,25 @@ namespace ComfyQuickSlots {
                 }
             }
             return false;
+        }
+
+        public static bool EquipArmorInArmorSlots(Player player) {
+            for(int i = 0; i < 5; i++) {
+                if(player.GetInventory().GetItemAt(i, 4) != null) {
+                    EquipItem(player, player.GetInventory().GetItemAt(i, 4));
+                }
+            }
+            return true;
+        }
+
+        public static bool UnequipAllArmor(Player player) {
+            for (int i = 0; i < 5; i++) {
+                ItemDrop.ItemData item = player.GetInventory().GetItemAt(i, 4);
+                if (item != null) {
+                    UnequipItem(player, item);                
+                }
+            }
+            return true;
         }
     }
 }

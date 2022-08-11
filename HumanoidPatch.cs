@@ -40,9 +40,11 @@ namespace ComfyQuickSlots {
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Humanoid), "EquipItem")]
-        public static void EquipItemPostfix(Humanoid __instance, bool __result, ItemDrop.ItemData item) {
-            ComfyQuickSlots.log($"Item equipped {item.m_equiped}");
-            __instance.GetInventory().Changed();
+        public static void EquipItemPostfix(Humanoid __instance, ItemDrop.ItemData item) {
+            if (__instance != null && item != null) {
+                ComfyQuickSlots.log($"Item equipped {item.m_equiped}");
+                __instance.GetInventory().Changed();
+            }
         }
 
         [HarmonyPrefix]
@@ -67,7 +69,9 @@ namespace ComfyQuickSlots {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Humanoid), "UnequipItem")]
         public static void UnequipItemPostfix(Humanoid __instance, ItemDrop.ItemData item, bool triggerEquipEffects) {
-            ComfyQuickSlots.log("Unequipping item complete.");
+            if(__instance != null && item != null) {
+                ComfyQuickSlots.log("Unequipping item complete.");
+            }
         }
     }
 }

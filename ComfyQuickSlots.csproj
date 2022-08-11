@@ -82,6 +82,7 @@
     <Compile Include="HotkeyBarPatch.cs" />
     <Compile Include="HumanoidPatch.cs" />
     <Compile Include="InventoryPatches.cs" />
+    <Compile Include="PlayerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TombstonePatcher.cs" />
     <Compile Include="UIPatcher.cs" />
