@@ -12,22 +12,6 @@ namespace ComfyQuickSlots {
     [HarmonyPatch(typeof(Inventory))]
     public static class InventoryPatch {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData))]
-        public static bool AddItemItemPrefix(Inventory __instance, ref bool __result, ItemDrop.ItemData item) {
-            if (__instance.m_name == "ComfyQuickSlotsInventory") {
-                //if (ComfyQuickSlots.HaveEmptyInventorySlot(__instance)) {
-                //    Vector2i emptySlot = ComfyQuickSlots.GetEmptyInventorySlot(__instance);
-                //    __instance.AddItem(item, item.m_stack, emptySlot.x, emptySlot.y);
-                //    return true;
-                //}
-                //__result = false;
-                //return false;
-                return true;
-            }
-            return true;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(Inventory), "AddItem", typeof(GameObject), typeof(int))]
         public static bool AddItemGameObjectPrefix(Inventory __instance, ref bool __result, GameObject prefab, int amount) {
             if (__instance.m_name == "ComfyQuickSlotsInventory") {
@@ -47,25 +31,31 @@ namespace ComfyQuickSlots {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
         public static bool AddItemPositionPrefix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
-            //ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}");
-            Vector2i loc = new Vector2i(x, y);
-            if (__instance.m_name == "ComfyQuickSlotsInventory") {
-                if (item.m_equiped && ComfyQuickSlots.isArmor(item)) {
-                    ComfyQuickSlots.UnequipItem(Player.m_localPlayer, item);
-                    Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(item);
-                    if (x == armorSlot.x && y == armorSlot.y) {
+            if(item != null) {
+                ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
+                Vector2i loc = new Vector2i(x, y);
+                if (__instance.m_name == "ComfyQuickSlotsInventory") {
+                    if (item.m_equiped && ComfyQuickSlots.isArmor(item)  && Player.m_localPlayer != null) {
+                        ComfyQuickSlots.UnequipItem(Player.m_localPlayer, item);
+                        Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(item);
+                        if (x == armorSlot.x && y == armorSlot.y) {
+                            return true;
+                        }
+                        if(ComfyQuickSlots.firstLoad) {
+                            ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list.");
+                            ComfyQuickSlots.initialEquippedArmor.Add(item);
+                        }
+                        return false;
+                    }
+                    if (Player.m_localPlayer == null) {
+                        ComfyQuickSlots.log("Adding item during menu loading phase.");
                         return true;
                     }
-                    if(ComfyQuickSlots.firstLoad) {
-                        ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list.");
-                        ComfyQuickSlots.initialEquippedArmor.Add(item);
+                    if (x < 5 && y == 4) {
+                        return false;
                     }
-                    return false;
-                }
-                if (x < 5 && y == 4) {
-                    return false;
-                }
 
+                }
             }
             return true;
         }

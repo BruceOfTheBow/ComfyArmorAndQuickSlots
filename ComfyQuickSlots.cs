@@ -26,7 +26,7 @@ namespace ComfyQuickSlots {
         Harmony _harmony;
         public static ConfigEntry<bool> isModEnabled;
 
-        private static bool _debug = true;
+        private static bool _debug = false;
 
         static Assembly assem = typeof(ComfyQuickSlots).Assembly;
         public static string fpath = assem.Location;
@@ -57,6 +57,7 @@ namespace ComfyQuickSlots {
         public static List<Vector2i> armorSlots = new List<Vector2i>() { helmetSlot, chestSlot, legsSlot, shoulderSlot, utilitySlot };
 
         public static bool firstLoad = false;
+        public static bool onMenuLoad = false;
         public static List<ItemDrop.ItemData> initialEquippedArmor = new List<ItemDrop.ItemData>();
 
         public void Awake() {
@@ -398,6 +399,7 @@ namespace ComfyQuickSlots {
             } else if (item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Utility) {
                 humanoid.m_utilityItem = item;
             }
+            log($"Equipped {item.m_shared.m_name}");
             item.m_equiped = true;
             humanoid.SetupEquipment();
             humanoid.TriggerEquipEffect(item);
