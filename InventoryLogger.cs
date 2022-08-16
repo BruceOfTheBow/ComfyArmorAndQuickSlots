@@ -46,7 +46,6 @@ namespace ComfyQuickSlots {
 
         private static string EscapeCsvField(string ValueToEscape) {
             if (ValueToEscape.Contains(",")) {
-
                 return "\"" + ValueToEscape + "\"";
             } else {
                 return ValueToEscape;
