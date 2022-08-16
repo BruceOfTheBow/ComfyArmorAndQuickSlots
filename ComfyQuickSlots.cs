@@ -17,7 +17,7 @@ namespace ComfyQuickSlots {
     public class ComfyQuickSlots : BaseUnityPlugin {
         public const string PluginGuid = "com.bruce.valheim.comfyquickslots";
         public const string PluginName = "ComfyQuickSlots";
-        public const string PluginVersion = "1.0.0.008";
+        public const string PluginVersion = "1.0.0";
 
         public const string playerDataKey = "ComfyQuickSlotsInventory";
         private static ConfigFile configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "ComfyQuickSlots.cfg"), true);
@@ -25,7 +25,7 @@ namespace ComfyQuickSlots {
         static ManualLogSource _logger;
         Harmony _harmony;
 
-        private static bool _debug = true;
+        private static bool _debug = false;
 
         static Assembly assem = typeof(ComfyQuickSlots).Assembly;
         public static string fpath = assem.Location;
@@ -127,8 +127,6 @@ namespace ComfyQuickSlots {
                     gridBkg.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 590f);
                     gridBkg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 300f + 75 * addedRows);
 
-                    //Add Quick slots and equipment overlays
-                    //for(int i = 36; i < rows*columns - 1; i++) {
                     Text bindingTextHead = __instance.m_elements[32].m_go.transform.Find("binding").GetComponent<Text>();
                     bindingTextHead.text = "Head";
                     bindingTextHead.enabled = true;
@@ -161,33 +159,19 @@ namespace ComfyQuickSlots {
                     bindingTextUtility.horizontalOverflow = HorizontalWrapMode.Overflow;
 
                     Text bindingText1 = __instance.m_elements[37].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText1.text = QuickSlot1.Value.ToString();
+                    bindingText1.text = KeyCodeUtils.ToShortString(QuickSlot1.Value);
                     bindingText1.enabled = true;
                     bindingText1.horizontalOverflow = HorizontalWrapMode.Overflow;
                     Text bindingText2 = __instance.m_elements[38].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText2.text = QuickSlot2.Value.ToString();
+                    bindingText2.text = KeyCodeUtils.ToShortString(QuickSlot2.Value);
                     bindingText2.enabled = true;
                     bindingText2.horizontalOverflow = HorizontalWrapMode.Overflow;
                     Text bindingText3 = __instance.m_elements[39].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText3.text = QuickSlot3.Value.ToString();
+                    bindingText3.text = KeyCodeUtils.ToShortString(QuickSlot3.Value);
                     bindingText3.enabled = true;
                     bindingText3.horizontalOverflow = HorizontalWrapMode.Overflow;
-                    //}
-
 
                 }
-                //log(__instance.name);
-                //log(__instance.m_elementPrefab.name);
-                // Will bork chest background panel
-
-                //if (__instance.name == "ContainerGrid") {
-                //    var bkg = __instance.transform.parent.Find("Bkg").gameObject;
-                //    Transform bkgT = bkg.transform;
-                //    bkgT.position = new Vector3(33 + 295, 550 - 75 * (rows - 4), 0);
-
-
-                //    //UnityEngine.Debug.Log("Attempted move");
-                //}
             }
 
             [HarmonyPostfix]
@@ -237,33 +221,18 @@ namespace ComfyQuickSlots {
                     bindingTextUtility.horizontalOverflow = HorizontalWrapMode.Overflow;
 
                     Text bindingText1 = __instance.m_elements[37].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText1.text = "Z";
+                    bindingText1.text = KeyCodeUtils.ToShortString(QuickSlot1.Value);
                     bindingText1.enabled = true;
                     bindingText1.horizontalOverflow = HorizontalWrapMode.Overflow;
                     Text bindingText2 = __instance.m_elements[38].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText2.text = "V";
+                    bindingText2.text = KeyCodeUtils.ToShortString(QuickSlot2.Value);
                     bindingText2.enabled = true;
                     bindingText2.horizontalOverflow = HorizontalWrapMode.Overflow;
                     Text bindingText3 = __instance.m_elements[39].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText3.text = "B";
+                    bindingText3.text = KeyCodeUtils.ToShortString(QuickSlot3.Value);
                     bindingText3.enabled = true;
                     bindingText3.horizontalOverflow = HorizontalWrapMode.Overflow;
-                    //}
-
-
                 }
-                //log(__instance.name);
-                //log(__instance.m_elementPrefab.name);
-                // Will bork chest background panel
-
-                //if (__instance.name == "ContainerGrid") {
-                //    var bkg = __instance.transform.parent.Find("Bkg").gameObject;
-                //    Transform bkgT = bkg.transform;
-                //    bkgT.position = new Vector3(33 + 295, 550 - 75 * (rows - 4), 0);
-
-
-                //    //UnityEngine.Debug.Log("Attempted move");
-                //}
             }
 
             private static RectTransform GetOrCreateBackground(InventoryGrid __instance, string name) {

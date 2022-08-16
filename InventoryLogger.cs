@@ -33,15 +33,24 @@ namespace ComfyQuickSlots {
         static string ItemToCsvRow(ItemDrop.ItemData item) {
             return string.Join(
                 ",",
-                item.m_shared.m_name,
+                EscapeCsvField(item.m_shared.m_name),
                 item.m_crafterID,
-                item.m_crafterName,
+                EscapeCsvField(item.m_crafterName),
                 item.m_gridPos.x,
                 item.m_gridPos.y,
                 item.m_quality,
                 item.m_stack,
                 item.m_variant
                 );
+        }
+
+        private static string EscapeCsvField(string ValueToEscape) {
+            if (ValueToEscape.Contains(",")) {
+
+                return "\"" + ValueToEscape + "\"";
+            } else {
+                return ValueToEscape;
+            }
         }
     }
 }

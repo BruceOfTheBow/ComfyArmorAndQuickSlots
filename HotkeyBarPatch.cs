@@ -13,7 +13,7 @@ namespace ComfyQuickSlots {
         public static GameObject QuickSlotsHotkeyBar;
         public static int SelectedHotkeyBarIndex = -1;
         public static int[] hotkeysIndices = { 37, 38, 39 };
-        public static string[] hotkeyTexts = { QuickSlot1.Value.ToString(), QuickSlot2.Value.ToString(), QuickSlot3.Value.ToString() };
+        public static string[] hotkeyTexts = { KeyCodeUtils.ToShortString(QuickSlot1.Value), KeyCodeUtils.ToShortString(QuickSlot2.Value), KeyCodeUtils.ToShortString(QuickSlot3.Value) };
 
         [HarmonyPatch(typeof(HotkeyBar))]
         public static class HotkeyBarPatch {
@@ -21,7 +21,7 @@ namespace ComfyQuickSlots {
             [HarmonyPatch(typeof(HotkeyBar), "UpdateIcons")]
             public static bool HotkeyBarPrefix(HotkeyBar __instance, Player player) {
                 if (__instance.name == "QuickSlotsHotkeyBar") {
-                    hotkeyTexts = new string[] { QuickSlot1.Value.ToString(), QuickSlot2.Value.ToString(), QuickSlot3.Value.ToString() };
+                    hotkeyTexts = new string[] { KeyCodeUtils.ToShortString(QuickSlot1.Value), KeyCodeUtils.ToShortString(QuickSlot2.Value), KeyCodeUtils.ToShortString(QuickSlot3.Value) };
                     if (player == null || player.IsDead()) {
                         foreach (var element in __instance.m_elements) {
                             Object.Destroy(element.m_go);
