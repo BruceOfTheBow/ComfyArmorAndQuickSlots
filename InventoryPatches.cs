@@ -32,18 +32,21 @@ namespace ComfyQuickSlots {
         [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
         public static bool AddItemPositionPrefix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
             if(item != null) {
-                ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
-                Vector2i loc = new Vector2i(x, y);
                 if (__instance.m_name == "ComfyQuickSlotsInventory") {
+                    Vector2i loc = new Vector2i(x, y);
+                    ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
+                    if (ComfyQuickSlots.firstLoad && ComfyQuickSlots.isArmor(item)) {
+                        ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list.");
+                        if(!ComfyQuickSlots.initialEquippedArmor.Contains((item))) {
+                            ComfyQuickSlots.initialEquippedArmor.Add(item);
+                        }
+                        return false;
+                    }
                     if (item.m_equiped && ComfyQuickSlots.isArmor(item)  && Player.m_localPlayer != null) {
                         ComfyQuickSlots.UnequipItem(Player.m_localPlayer, item);
                         Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(item);
                         if (x == armorSlot.x && y == armorSlot.y) {
                             return true;
-                        }
-                        if(ComfyQuickSlots.firstLoad) {
-                            ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list.");
-                            ComfyQuickSlots.initialEquippedArmor.Add(item);
                         }
                         return false;
                     }
@@ -69,18 +72,6 @@ namespace ComfyQuickSlots {
                 }
             }
             ComfyQuickSlots.log($"Moving {item.m_shared.m_name} from {item.m_gridPos.x},{item.m_gridPos.y} in {fromInventory.m_name} to {x},{y} {__instance.m_name}");
-            return true;
-        }
-
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Inventory), "CanAddItem", typeof(ItemDrop.ItemData), typeof(int))]
-        public static bool CanAdditemPrefix(Inventory __instance, ref bool __result, ItemDrop.ItemData item, int stack) {
-            if (__instance.m_name == "ComfyQuickSlotsInventory") {
-                ComfyQuickSlots.log("Checking if can add item to player inventory");
-                __result = ComfyQuickSlots.HaveEmptyInventorySlot(__instance);
-                return false;
-            }
             return true;
         }
 

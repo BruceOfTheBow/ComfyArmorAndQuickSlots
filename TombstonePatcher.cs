@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+using static ComfyQuickSlots.PluginConfig;
 
 namespace ComfyQuickSlots {
 
@@ -34,6 +35,10 @@ namespace ComfyQuickSlots {
                 }
                 __instance.GetInventory().m_height = 4;
                 __instance.GetInventory().m_width = 8;
+
+                Directory.CreateDirectory(LogFilesPath.Value);
+                string filename = __instance.GetPlayerID() + __instance.GetPlayerName() + ".csv";
+                InventoryLogger.LogInventoryToFile(__instance.GetInventory(), Path.Combine(LogFilesPath.Value, filename));
             }
         }
 

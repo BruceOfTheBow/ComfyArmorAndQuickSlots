@@ -6,12 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
+using static ComfyQuickSlots.PluginConfig;
+
 namespace ComfyQuickSlots {
     public static class HotKeyBarController {
         public static GameObject QuickSlotsHotkeyBar;
         public static int SelectedHotkeyBarIndex = -1;
         public static int[] hotkeysIndices = { 37, 38, 39 };
-        public static string[] hotkeyTexts = { "Z", "V", "B" };
+        public static string[] hotkeyTexts = { QuickSlot1.Value.ToString(), QuickSlot2.Value.ToString(), QuickSlot3.Value.ToString() };
 
         [HarmonyPatch(typeof(HotkeyBar))]
         public static class HotkeyBarPatch {
@@ -19,6 +21,7 @@ namespace ComfyQuickSlots {
             [HarmonyPatch(typeof(HotkeyBar), "UpdateIcons")]
             public static bool HotkeyBarPrefix(HotkeyBar __instance, Player player) {
                 if (__instance.name == "QuickSlotsHotkeyBar") {
+                    hotkeyTexts = new string[] { QuickSlot1.Value.ToString(), QuickSlot2.Value.ToString(), QuickSlot3.Value.ToString() };
                     if (player == null || player.IsDead()) {
                         foreach (var element in __instance.m_elements) {
                             Object.Destroy(element.m_go);
@@ -115,14 +118,14 @@ namespace ComfyQuickSlots {
             public static void Postfix(Hud __instance) {
                 var hotkeyBar = __instance.GetComponentInChildren<HotkeyBar>();
 
-                if (ComfyQuickSlots.isModEnabled.Value && hotkeyBar.transform.parent.Find("QuickSlotsHotkeyBar") == null) {
+                if (IsModEnabled.Value && hotkeyBar.transform.parent.Find("QuickSlotsHotkeyBar") == null) {
                     QuickSlotsHotkeyBar = Object.Instantiate(hotkeyBar.gameObject, __instance.m_rootObject.transform, true);
                     QuickSlotsHotkeyBar.name = "QuickSlotsHotkeyBar";
                     QuickSlotsHotkeyBar.GetComponent<HotkeyBar>().m_selected = -1;
 
                     var configPositionedElement = QuickSlotsHotkeyBar.AddComponent<ConfigPositionedElement>();
-                    configPositionedElement.PositionConfig = ComfyQuickSlots.QuickSlotsPosition;
-                    configPositionedElement.AnchorConfig = ComfyQuickSlots.QuickSlotsAnchor;
+                    configPositionedElement.PositionConfig = QuickSlotsPosition;
+                    configPositionedElement.AnchorConfig = QuickSlotsAnchor;
                     configPositionedElement.EnsureCorrectPosition();
                 }
             }

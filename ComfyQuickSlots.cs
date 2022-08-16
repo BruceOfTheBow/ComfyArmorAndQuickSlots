@@ -10,23 +10,22 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
 
-//using static ComfyQuickSlots.ComfyQuickSlotsConfig;
+using static ComfyQuickSlots.PluginConfig;
 
 namespace ComfyQuickSlots {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     public class ComfyQuickSlots : BaseUnityPlugin {
         public const string PluginGuid = "com.bruce.valheim.comfyquickslots";
         public const string PluginName = "ComfyQuickSlots";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.0.008";
 
-        private const string countsFileName = "arrowCounts";
+        public const string playerDataKey = "ComfyQuickSlotsInventory";
         private static ConfigFile configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "ComfyQuickSlots.cfg"), true);
 
         static ManualLogSource _logger;
         Harmony _harmony;
-        public static ConfigEntry<bool> isModEnabled;
 
-        private static bool _debug = false;
+        private static bool _debug = true;
 
         static Assembly assem = typeof(ComfyQuickSlots).Assembly;
         public static string fpath = assem.Location;
@@ -37,10 +36,6 @@ namespace ComfyQuickSlots {
 
         public const int rows = 5;
         public const int columns = 8;
-
-        public static ConfigEntry<TextAnchor> QuickSlotsAnchor;
-        public static ConfigEntry<Vector2> QuickSlotsPosition;
-
         public static readonly List<ItemDrop.ItemData.ItemType> ArmorSlotTypes = new List<ItemDrop.ItemData.ItemType>() {
             ItemDrop.ItemData.ItemType.Helmet,
             ItemDrop.ItemData.ItemType.Chest,
@@ -60,13 +55,13 @@ namespace ComfyQuickSlots {
         public static bool onMenuLoad = false;
         public static List<ItemDrop.ItemData> initialEquippedArmor = new List<ItemDrop.ItemData>();
 
+        
+
         public void Awake() {
-            isModEnabled = Config.Bind<bool>("_Global", "isModEnabled", true, "Enable or disable this mod.");
             _harmony = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), harmonyInstanceId: PluginGuid);
             _logger = Logger;
-            QuickSlotsAnchor = Config.Bind("Quick Slots", "Quick Slots Anchor", TextAnchor.LowerLeft, "The point on the HUD to anchor the Quick Slots bar. Changing this also changes the pivot of the Quick Slots to that corner.");
-            QuickSlotsPosition = Config.Bind("Quick Slots", "Quick Slots Position", new Vector2(216, 150), "The position offset from the Quick Slots Anchor at which to place the Quick Slots.");
-            //BindConfig(configFile);
+           
+            BindConfig(Config);
 
             if (File.Exists($@"{path}Gravekeeper.dll")) {
                 Logger.LogInfo("Gravekeeper found");
@@ -85,8 +80,7 @@ namespace ComfyQuickSlots {
             var player = Player.m_localPlayer;
             if (player != null) {
                 if (player.TakeInput()) {
-                    if (Input.GetKeyDown(KeyCode.B)) {
-                        log("Hitting B");
+                    if (Input.GetKeyDown(QuickSlot3.Value)) {
                         ItemDrop.ItemData item = Player.m_localPlayer.GetInventory().GetItemAt(7, 4);
                         if(item != null) {
                             log($"Using item {item.m_shared.m_name}");
@@ -95,8 +89,7 @@ namespace ComfyQuickSlots {
                             log("No item in slot");
                         }
                     }
-                    if (Input.GetKeyDown(KeyCode.V)) {
-                        log("Hitting B");
+                    if (Input.GetKeyDown(QuickSlot2.Value)) {
                         ItemDrop.ItemData item = Player.m_localPlayer.GetInventory().GetItemAt(6, 4);
                         if (item != null) {
                             log($"Using item {item.m_shared.m_name}");
@@ -105,8 +98,7 @@ namespace ComfyQuickSlots {
                             log("No item in slot");
                         }
                     }
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        log("Hitting B");
+                    if (Input.GetKeyDown(QuickSlot1.Value)) {
                         ItemDrop.ItemData item = Player.m_localPlayer.GetInventory().GetItemAt(5, 4);
                         if (item != null) {
                             log($"Using item {item.m_shared.m_name}");
@@ -169,15 +161,15 @@ namespace ComfyQuickSlots {
                     bindingTextUtility.horizontalOverflow = HorizontalWrapMode.Overflow;
 
                     Text bindingText1 = __instance.m_elements[37].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText1.text = "Z";
+                    bindingText1.text = QuickSlot1.Value.ToString();
                     bindingText1.enabled = true;
                     bindingText1.horizontalOverflow = HorizontalWrapMode.Overflow;
                     Text bindingText2 = __instance.m_elements[38].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText2.text = "V";
+                    bindingText2.text = QuickSlot2.Value.ToString();
                     bindingText2.enabled = true;
                     bindingText2.horizontalOverflow = HorizontalWrapMode.Overflow;
                     Text bindingText3 = __instance.m_elements[39].m_go.transform.Find("binding").GetComponent<Text>();
-                    bindingText3.text = "B";
+                    bindingText3.text = QuickSlot3.Value.ToString();
                     bindingText3.enabled = true;
                     bindingText3.horizontalOverflow = HorizontalWrapMode.Overflow;
                     //}
@@ -533,6 +525,19 @@ namespace ComfyQuickSlots {
             if(player.m_utilityItem != null) {
                 initialEquippedArmor.Add(player.m_utilityItem);
             }
+        }
+
+        public static bool Save(Player player) {
+            log($"Saving inventory data to {playerDataKey}");
+            ZPackage pkg = new ZPackage();
+            player.GetInventory().Save(pkg);
+            if (player.m_knownTexts.ContainsKey(playerDataKey)) {
+                player.m_knownTexts[playerDataKey] = pkg.GetBase64();
+            } else {
+                player.m_knownTexts.Add(playerDataKey, pkg.GetBase64());
+            }
+
+            return true;
         }
     }
 }
