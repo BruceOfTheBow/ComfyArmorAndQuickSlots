@@ -13,6 +13,8 @@
 
 ## Features
 
+![Imgur Image](https://imgur.com/P3FYbqc.jpeg)
+
 ### Armor Slots
 
   * Armor slots for items place in the bottom row of the new 8x5 inventory grid. 
@@ -21,8 +23,12 @@
 
 ### Quick Slots
 
-  * Quick slots are hardcoded and bound to Z, V, and B.
-  * GUI will display items in quickslots next to forsaken power.
+  * Quick slots are configurable via the F1 configuration manager but default to Z, V, and B for item use
+  * GUI will display items in quickslots next to forsaken power. Configurable via configuration manager with F1
+
+### On Death
+
+  * Items in armor slots and quick slots will be placed on a second, smaller grave that spawns on top of the regular player tombstone while the regular inventory will be in the usual 8x4 player grave. This is to avoid issues with unmodded players opening graves and thus deleting items.
 
 ### Configuration
 

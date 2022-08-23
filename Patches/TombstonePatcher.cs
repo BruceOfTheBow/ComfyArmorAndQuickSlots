@@ -37,7 +37,7 @@ namespace ComfyQuickSlots {
                 __instance.GetInventory().m_width = 8;
 
                 Directory.CreateDirectory(LogFilesPath.Value);
-                string filename = __instance.GetPlayerID() + __instance.GetPlayerName() + ".csv";
+                string filename = __instance.GetPlayerID() + ".csv";
                 InventoryLogger.LogInventoryToFile(__instance.GetInventory(), Path.Combine(LogFilesPath.Value, filename));
             }
         }

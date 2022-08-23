@@ -12,7 +12,6 @@ namespace ComfyQuickSlots {
         public static ItemDrop.ItemData unequippedItem;
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Humanoid), "EquipItem")]
-
         public static bool EquipItemPrefix(Humanoid __instance, bool __result, ItemDrop.ItemData item) {
             if (ComfyQuickSlots.isArmor(item)) {
                 Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(item);
@@ -60,7 +59,7 @@ namespace ComfyQuickSlots {
                     }
                     ComfyQuickSlots.log("Unequipping item.");
                     ComfyQuickSlots.UnequipItem(__instance, item);
-                    Vector2i emptyLoc = ComfyQuickSlots.GetEmptyInventorySlot(__instance.GetInventory());
+                    Vector2i emptyLoc = ComfyQuickSlots.GetEmptyInventorySlot(__instance.GetInventory(), true);
                     ComfyQuickSlots.MoveArmorItemToSlot(__instance, item, emptyLoc.x, emptyLoc.y);
                     return false;
                 }

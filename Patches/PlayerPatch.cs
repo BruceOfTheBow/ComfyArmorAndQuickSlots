@@ -39,7 +39,12 @@ namespace ComfyQuickSlots {
                     Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(armorPiece);
                     ComfyQuickSlots.MoveArmorItemToSlot(__instance, armorPiece, armorSlot.x, armorSlot.y);
                     __instance.GetInventory().Changed();
-                    ComfyQuickSlots.initialEquippedArmor.Remove(armorPiece);
+                }
+            }
+
+            foreach(ItemDrop.ItemData item in __instance.GetInventory().m_inventory) {
+                if(item.IsEquipable() && !ComfyQuickSlots.isArmor(item) && item.m_equiped) {
+                    __instance.EquipItem(item);
                 }
             }
         }

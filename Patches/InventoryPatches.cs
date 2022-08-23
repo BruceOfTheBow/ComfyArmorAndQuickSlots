@@ -18,7 +18,7 @@ namespace ComfyQuickSlots {
                 //ComfyQuickSlots.log($"Adding {amount} game object {prefab.GetComponent<ItemDrop>().m_itemData.Clone().m_shared.m_name}");
                 ItemDrop.ItemData item = prefab.GetComponent<ItemDrop>().m_itemData;
                 if (ComfyQuickSlots.HaveEmptyInventorySlot(__instance)) {
-                    Vector2i emptySlot = ComfyQuickSlots.GetEmptyInventorySlot(__instance);
+                    Vector2i emptySlot = ComfyQuickSlots.GetEmptyInventorySlot(__instance, __instance.TopFirst(item));
                     __instance.AddItem(item, item.m_stack, emptySlot.x, emptySlot.y);
                     return true;
                 }
@@ -34,7 +34,7 @@ namespace ComfyQuickSlots {
             if(item != null) {
                 if (__instance.m_name == "ComfyQuickSlotsInventory") {
                     Vector2i loc = new Vector2i(x, y);
-                    ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
+                    //ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
                     if (ComfyQuickSlots.firstLoad && ComfyQuickSlots.isArmor(item)) {
                         ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list.");
                         if(!ComfyQuickSlots.initialEquippedArmor.Contains((item))) {
@@ -51,7 +51,7 @@ namespace ComfyQuickSlots {
                         return false;
                     }
                     if (Player.m_localPlayer == null) {
-                        ComfyQuickSlots.log("Adding item during menu loading phase.");
+                        //ComfyQuickSlots.log("Adding item during menu loading phase.");
                         return true;
                     }
                     if (x < 5 && y == 4) {
@@ -79,7 +79,7 @@ namespace ComfyQuickSlots {
         [HarmonyPatch(typeof(Inventory), "FindEmptySlot")]
         public static bool FindEmptySlotPrefix(Inventory __instance, bool topFirst, ref Vector2i __result) {
             if (__instance.m_name == "ComfyQuickSlotsInventory") {
-                __result = ComfyQuickSlots.GetEmptyInventorySlot(__instance);
+                __result = ComfyQuickSlots.GetEmptyInventorySlot(__instance, topFirst);
                 ComfyQuickSlots.log($"Found empty slot in ${__instance.m_name} at {__result.x},{__result.y}");
                 return false;
             }

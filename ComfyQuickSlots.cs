@@ -269,18 +269,33 @@ namespace ComfyQuickSlots {
             }
             return false;
         }
-        public static Vector2i GetEmptyInventorySlot(Inventory inventory) {
-            for (int i = 0; i < columns; i++) {
+        public static Vector2i GetEmptyInventorySlot(Inventory inventory, bool topFirst) {
+            if(topFirst) {
                 for (int j = 0; j < rows; j++) {
-                    if (inventory.GetItemAt(i, j) == null && j != 4) {
-                        return new Vector2i(i, j);
-                    } else {
-                        if (i > 4 && j == 4 && inventory.GetItemAt(i, j) == null) {
+                    for (int i = 0; i < columns; i++) {
+                        if (inventory.GetItemAt(i, j) == null && j != 4) {
                             return new Vector2i(i, j);
+                        } else {
+                            if (i > 4 && j == 4 && inventory.GetItemAt(i, j) == null) {
+                                return new Vector2i(i, j);
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (int j = rows - 1; j >= 0; j--) {
+                    for (int i = 0; i < columns; i++) {
+                        if (inventory.GetItemAt(i, j) == null && j != 4) {
+                            return new Vector2i(i, j);
+                        } else {
+                            if (i > 4 && j == 4 && inventory.GetItemAt(i, j) == null) {
+                                return new Vector2i(i, j);
+                            }
                         }
                     }
                 }
             }
+            
             return new Vector2i(-1, -1);
         }
         public static bool isArmor(ItemDrop.ItemData item) {
@@ -446,7 +461,7 @@ namespace ComfyQuickSlots {
                         i++;
                     } else {
                         item.m_stack = item.m_stack - i;
-                        Vector2i vector2i = ComfyQuickSlots.GetEmptyInventorySlot(inventory);
+                        Vector2i vector2i = ComfyQuickSlots.GetEmptyInventorySlot(inventory, true);
                         if (vector2i.x >= 0) {
                             item.m_gridPos = vector2i;
                             inventory.m_inventory.Add(item);
