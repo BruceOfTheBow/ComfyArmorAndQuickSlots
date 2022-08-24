@@ -25,7 +25,7 @@ namespace ComfyQuickSlots {
         static ManualLogSource _logger;
         Harmony _harmony;
 
-        private static bool _debug = false;
+        private static bool _debug = true;
 
         static Assembly assem = typeof(ComfyQuickSlots).Assembly;
         public static string fpath = assem.Location;

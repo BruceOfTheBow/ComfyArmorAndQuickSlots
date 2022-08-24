@@ -35,8 +35,8 @@ namespace ComfyQuickSlots {
                 if (__instance.m_name == "ComfyQuickSlotsInventory") {
                     Vector2i loc = new Vector2i(x, y);
                     //ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
-                    if (ComfyQuickSlots.firstLoad && ComfyQuickSlots.isArmor(item)) {
-                        ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list.");
+                    if (ComfyQuickSlots.firstLoad && ComfyQuickSlots.isArmor(item) && item.m_equiped) {
+                        ComfyQuickSlots.log($"Adding {item.m_shared.m_name} to initial armor list. Item not added to inventory");
                         if(!ComfyQuickSlots.initialEquippedArmor.Contains((item))) {
                             ComfyQuickSlots.initialEquippedArmor.Add(item);
                         }
@@ -46,12 +46,13 @@ namespace ComfyQuickSlots {
                         ComfyQuickSlots.UnequipItem(Player.m_localPlayer, item);
                         Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(item);
                         if (x == armorSlot.x && y == armorSlot.y) {
+                            ComfyQuickSlots.log($"Adding equipped item {item.m_shared.m_name} to armor slot.");
                             return true;
                         }
                         return false;
                     }
                     if (Player.m_localPlayer == null) {
-                        //ComfyQuickSlots.log("Adding item during menu loading phase.");
+                        ComfyQuickSlots.log("Adding item during menu loading phase.");
                         return true;
                     }
                     if (x < 5 && y == 4) {
@@ -97,46 +98,46 @@ namespace ComfyQuickSlots {
             return true;
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "FindEmptySlot")]
-        public static void FindEmptySlotPostfix(Inventory __instance, bool topFirst) {
-            ComfyQuickSlots.log($"Finding Empty slots in ${__instance.m_name}");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "FindEmptySlot")]
+        //public static void FindEmptySlotPostfix(Inventory __instance, bool topFirst) {
+        //    ComfyQuickSlots.log($"Finding Empty slots in ${__instance.m_name}");
+        //}
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "RemoveItem", typeof(int))]
-        public static void RemoveItemPostfix(Inventory __instance, int index) {
-            ComfyQuickSlots.log($"Removing item at {index}.");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "RemoveItem", typeof(int))]
+        //public static void RemoveItemPostfix(Inventory __instance, int index) {
+        //    ComfyQuickSlots.log($"Removing item at {index}.");
+        //}
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "RemoveItem", typeof(ItemDrop.ItemData))]
-        public static void RemoveItemItemPostfix(Inventory __instance, ItemDrop.ItemData item) {
-            ComfyQuickSlots.log($"Removing {item.m_shared.m_name}");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "RemoveItem", typeof(ItemDrop.ItemData))]
+        //public static void RemoveItemItemPostfix(Inventory __instance, ItemDrop.ItemData item) {
+        //    ComfyQuickSlots.log($"Removing {item.m_shared.m_name}");
+        //}
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "RemoveItem", typeof(ItemDrop.ItemData), typeof(int))]
-        public static void RemoveItemAmountPostfix(Inventory __instance, ItemDrop.ItemData item, int amount) {
-            ComfyQuickSlots.log($"Removing {amount} of item at {item.m_shared.m_name}.");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "RemoveItem", typeof(ItemDrop.ItemData), typeof(int))]
+        //public static void RemoveItemAmountPostfix(Inventory __instance, ItemDrop.ItemData item, int amount) {
+        //    ComfyQuickSlots.log($"Removing {amount} of item at {item.m_shared.m_name}.");
+        //}
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData))]
-        public static void AddItemItemPostfix(Inventory __instance, ItemDrop.ItemData item) {
-            ComfyQuickSlots.log($"Adding item {item.m_shared.m_name}.");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData))]
+        //public static void AddItemItemPostfix(Inventory __instance, ItemDrop.ItemData item) {
+        //    ComfyQuickSlots.log($"Adding item {item.m_shared.m_name}.");
+        //}
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "AddItem", typeof(GameObject), typeof(int))]
-        public static void AddItemGameObjectPostfix(Inventory __instance, GameObject prefab, int amount) {
-            ComfyQuickSlots.log($"Adding game object {prefab.GetComponent<ItemDrop.ItemData>().m_shared.m_name}.");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "AddItem", typeof(GameObject), typeof(int))]
+        //public static void AddItemGameObjectPostfix(Inventory __instance, GameObject prefab, int amount) {
+        //    ComfyQuickSlots.log($"Adding game object {prefab.GetComponent<ItemDrop.ItemData>().m_shared.m_name}.");
+        //}
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
-        public static void AddItemPositionPostfix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
-            ComfyQuickSlots.log($"Adding item {item.m_shared.m_name} to {x},{y}.");
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
+        //public static void AddItemPositionPostfix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
+        //    ComfyQuickSlots.log($"Adding item {item.m_shared.m_name} to {x},{y}.");
+        //}
     }
 }

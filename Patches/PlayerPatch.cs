@@ -40,6 +40,9 @@ namespace ComfyQuickSlots {
                     ComfyQuickSlots.MoveArmorItemToSlot(__instance, armorPiece, armorSlot.x, armorSlot.y);
                     __instance.GetInventory().Changed();
                 }
+                // Removes armor from cache in case Player Load is called more than once on world entry
+                ComfyQuickSlots.log($"Player loaded in game or menu and armor equipped. Cached list cleared.");
+                ComfyQuickSlots.initialEquippedArmor = new List<ItemDrop.ItemData>();
             }
 
             foreach(ItemDrop.ItemData item in __instance.GetInventory().m_inventory) {
