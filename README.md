@@ -30,10 +30,6 @@
 
   * Items in armor slots and quick slots will be placed on a second, smaller grave that spawns on top of the regular player tombstone while the regular inventory will be in the usual 8x4 player grave. This is to avoid issues with unmodded players opening graves and thus deleting items.
 
-### Configuration
-
-  * TBD
-
 ## Notes
 
   * If a character is logged into unmodded after a player save using this mod, any deltas in the inventory between the last modded save and a vanilla save will be overwritten by the last modded save.
@@ -43,6 +39,10 @@
   * Check out our community driven listing site at: [valheimlist.org](https://valheimlist.org/)
 
 ## Changelog
+
+### 1.0.1
+
+  * Disables debugging log statements.
 
 ### 1.0.0
 
