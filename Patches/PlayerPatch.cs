@@ -56,6 +56,7 @@ namespace ComfyQuickSlots {
         [HarmonyPatch(typeof(Player), "Save")]
         public static bool PlayerSavePrefix(Player __instance) {
             ComfyQuickSlots.log($"Adding armor and quick slots data to save file as {ComfyQuickSlots.playerDataKey}.");
+            ComfyQuickSlots.firstLoad = false;
             return ComfyQuickSlots.Save(__instance);
         }
 

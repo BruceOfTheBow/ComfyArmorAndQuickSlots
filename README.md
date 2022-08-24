@@ -8,7 +8,7 @@
 
 ### Thunderstore (manual)
 
-  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.0.0.zip`.
+  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.0.2.zip`.
   * Click "OK/Import local mod" on the pop-up for information.
 
 ## Features
@@ -39,6 +39,14 @@
   * Check out our community driven listing site at: [valheimlist.org](https://valheimlist.org/)
 
 ## Changelog
+
+### 1.0.3
+
+  * Disables debugging log statements.
+
+### 1.0.2
+
+  * Fixed issue where logging out after first log-in with mod enabled could delete armor. First log-in check now reset on player save.
 
 ### 1.0.1
 
