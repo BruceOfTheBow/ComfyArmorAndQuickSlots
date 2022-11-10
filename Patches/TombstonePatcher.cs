@@ -19,9 +19,14 @@ namespace ComfyQuickSlots {
         [HarmonyPatch(typeof(Player), "CreateTombStone")]
         public static void CreateTombStonePrefix(Player __instance) {
             if (!ComfyQuickSlots.GKInstalled) {
+                // Log Items in tombstone on death for auditing and tracking purposes
+                Directory.CreateDirectory(LogFilesPath.Value);
+                string filename = __instance.GetPlayerID() + ".csv";
+                InventoryLogger.LogInventoryToFile(__instance.GetInventory(), Path.Combine(LogFilesPath.Value, filename));
+
                 Player that = __instance;
                 ComfyQuickSlots.UnequipAllArmor(__instance);
-                GameObject additionalTombstone = UnityEngine.Object.Instantiate(that.m_tombstone, that.GetCenterPoint() + Vector3.up * 2.5f, that.transform.rotation);
+                GameObject additionalTombstone = UnityEngine.Object.Instantiate(that.m_tombstone, that.GetCenterPoint() + Vector3.up * 1.25f, that.transform.rotation);
                 additionalTombstone.gameObject.transform.localScale -= new Vector3(.5f, .5f, .5f);
                 Container graveContainer = additionalTombstone.GetComponent<Container>();
 
@@ -35,10 +40,6 @@ namespace ComfyQuickSlots {
                 }
                 __instance.GetInventory().m_height = 4;
                 __instance.GetInventory().m_width = 8;
-
-                Directory.CreateDirectory(LogFilesPath.Value);
-                string filename = __instance.GetPlayerID() + ".csv";
-                InventoryLogger.LogInventoryToFile(__instance.GetInventory(), Path.Combine(LogFilesPath.Value, filename));
             }
         }
 

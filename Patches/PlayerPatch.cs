@@ -59,20 +59,16 @@ namespace ComfyQuickSlots {
             ComfyQuickSlots.firstLoad = false;
             return ComfyQuickSlots.Save(__instance);
         }
-
-
-        //[HarmonyPostfix]
-        //[HarmonyPatch(typeof(Game), nameof(Game.SpawnPlayer))]
-        //public static void SpawnPlayerPostfix(Game __instance) {
-        //    if (!__instance.m_firstSpawn) {
-
-        //        foreach (ItemDrop.ItemData item in Player.m_localPlayer.GetInventory().m_inventory) {
-        //            if (ComfyQuickSlots.isArmor(item)) {
-
-        //            }
-        //        }
-
-        //    }
-        //}
+        
+        // Prevents interaction with item stands and armor stands while item is equipping
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), "UseHotbarItem")]
+        public static bool UseHotBarItemPrefix(Player __instance, int index) {
+            ItemDrop.ItemData itemAt = __instance.m_inventory.GetItemAt(index - 1, 0);
+            if (__instance.IsItemQueued(itemAt)) {
+                return false;
+            }
+            return true;
+        }
     }
 }

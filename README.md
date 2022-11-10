@@ -8,7 +8,7 @@
 
 ### Thunderstore (manual)
 
-  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.0.2.zip`.
+  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.0.5.zip`.
   * Click "OK/Import local mod" on the pop-up for information.
 
 ## Features
@@ -32,6 +32,7 @@
 
 ## Notes
 
+  * **If using better UI set showDurabilityColor to disabled to prevent error log spam.**
   * If a character is logged into unmodded after a player save using this mod, any deltas in the inventory between the last modded save and a vanilla save will be overwritten by the last modded save.
   * This is a rework of Randy Knapp's Equipment and Quick Slots mod that looks to fix the issues around item deletion as well as issues around vanilla and modded player interaction. Tombstone handling modeled off Fang86's MoreSlots mod.
   * See source at: [GitHub](https://github.com/BruceOfTheBow/ComfyArmorAndQuickSlots).
@@ -39,6 +40,19 @@
   * Check out our community driven listing site at: [valheimlist.org](https://valheimlist.org/)
 
 ## Changelog
+
+### 1.0.6
+
+  * Fixed issues with item use on equip.
+
+### 1.0.5
+
+  * Disables debugging log statements.
+
+### 1.0.4
+
+  * Reduced pop of second grave to prevent clipping through low ceilings.
+  * Disabled selecting of items in armor slots to prevent unwanted inventory behavior and related bugs. Armor and utility items must be unequipped before removing from inventory.
 
 ### 1.0.3
 
