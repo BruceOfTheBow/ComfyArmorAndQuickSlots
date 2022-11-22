@@ -10,7 +10,7 @@ namespace ValheimInventorySlots {
     [BepInPlugin(FixGuiGuid, FixGuiName, FixVersion)]
     public class FixGuiFrame : BaseUnityPlugin {
         public const string FixGuiGuid = "8F0F9F2B-E481-4BEC-B641-01228D7508F9";
-        public const string FixGuiName = "MoreSlotsPatcher";
+        public const string FixGuiName = "MoreSlotsPatcherForComfyQuickslots";
         public const string FixVersion = "1.1.0";
 
         GameObject inventoryScreenObjectRoot;
