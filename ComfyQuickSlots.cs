@@ -17,7 +17,7 @@ namespace ComfyQuickSlots {
     public class ComfyQuickSlots : BaseUnityPlugin {
         public const string PluginGuid = "com.bruce.valheim.comfyquickslots";
         public const string PluginName = "ComfyQuickSlots";
-        public const string PluginVersion = "1.0.6";
+        public const string PluginVersion = "1.0.7";
 
         public const string playerDataKey = "ComfyQuickSlotsInventory";
         private static ConfigFile configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "ComfyQuickSlots.cfg"), true);
@@ -80,7 +80,7 @@ namespace ComfyQuickSlots {
                 if (player.TakeInput()) {
                     if (Input.GetKeyDown(QuickSlot3.Value)) {
                         ItemDrop.ItemData item = Player.m_localPlayer.GetInventory().GetItemAt(7, 4);
-                        if(item != null && !Player.m_localPlayer.IsItemQueued(item)) {
+                        if(item != null && !Player.m_localPlayer.IsEquipActionQueued(item)) {
                             log($"Using item {item.m_shared.m_name}");
                             Player.m_localPlayer.UseItem(null, item, false);
                         } else {
@@ -89,7 +89,7 @@ namespace ComfyQuickSlots {
                     }
                     if (Input.GetKeyDown(QuickSlot2.Value)) {
                         ItemDrop.ItemData item = Player.m_localPlayer.GetInventory().GetItemAt(6, 4);
-                        if (item != null && !Player.m_localPlayer.IsItemQueued(item)) {
+                        if (item != null && !Player.m_localPlayer.IsEquipActionQueued(item)) {
                             log($"Using item {item.m_shared.m_name}");
                             Player.m_localPlayer.UseItem(null, item, false);
                         } else {
@@ -98,7 +98,7 @@ namespace ComfyQuickSlots {
                     }
                     if (Input.GetKeyDown(QuickSlot1.Value)) {
                         ItemDrop.ItemData item = Player.m_localPlayer.GetInventory().GetItemAt(5, 4);
-                        if (item != null && !Player.m_localPlayer.IsItemQueued(item)) {
+                        if (item != null && !Player.m_localPlayer.IsEquipActionQueued(item)) {
                             log($"Using item {item.m_shared.m_name}");
                             Player.m_localPlayer.UseItem(null, item, false);
                         } else {

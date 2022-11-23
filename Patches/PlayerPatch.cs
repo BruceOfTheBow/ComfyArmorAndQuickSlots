@@ -65,7 +65,7 @@ namespace ComfyQuickSlots {
         [HarmonyPatch(typeof(Player), "UseHotbarItem")]
         public static bool UseHotBarItemPrefix(Player __instance, int index) {
             ItemDrop.ItemData itemAt = __instance.m_inventory.GetItemAt(index - 1, 0);
-            if (__instance.IsItemQueued(itemAt)) {
+            if (__instance.IsEquipActionQueued(itemAt)) {
                 return false;
             }
             return true;

@@ -15,7 +15,7 @@ namespace ComfyQuickSlots.Patches {
                 return false;
             }
 
-            if(Player.m_localPlayer.IsItemQueued(item)) {
+            if(Player.m_localPlayer.IsEquipActionQueued(item)) {
               return false;
             }
             return true;
