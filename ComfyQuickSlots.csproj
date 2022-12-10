@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\FejdStartupPatcher.cs" />
+    <Compile Include="Patches\InventoryGridPatch.cs" />
     <Compile Include="Patches\InventoryGuiPatch.cs" />
     <Compile Include="PluginConfig.cs" />
     <Compile Include="InventoryLogger.cs" />

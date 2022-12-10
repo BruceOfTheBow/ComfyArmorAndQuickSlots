@@ -8,15 +8,17 @@ using HarmonyLib;
 using UnityEngine;
 
 using static ComfyQuickSlots.ComfyQuickSlots;
+using static ComfyQuickSlots.InventoryExtensions;
 
 namespace ComfyQuickSlots {
 
   [HarmonyPatch(typeof(Inventory))]
   public static class InventoryPatch {
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(Inventory), "AddItem", typeof(GameObject), typeof(int))]
+    [HarmonyPatch(nameof(Inventory.AddItem))]
     public static bool AddItemGameObjectPrefix(Inventory __instance, ref bool __result, GameObject prefab, int amount) {
-      if (__instance.m_name == "ComfyQuickSlotsInventory") {
+      if (__instance.IsPlayerInventory()) {
+        //ComfyQuickSlots.log($"Adding {amount} game object {prefab.GetComponent<ItemDrop>().m_itemData.Clone().m_shared.m_name}");
         ItemDrop.ItemData item = prefab.GetComponent<ItemDrop>().m_itemData;
         if (HaveEmptyInventorySlot(__instance)) {
           Vector2i emptySlot = GetEmptyInventorySlot(__instance, __instance.TopFirst(item));
@@ -30,36 +32,29 @@ namespace ComfyQuickSlots {
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
+    [HarmonyPatch(nameof(Inventory.AddItem))]
     public static bool AddItemPositionPrefix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
-      if (item != null) {
-        if (__instance.m_name == "ComfyQuickSlotsInventory") {
-          Vector2i loc = new Vector2i(x, y);
-          //ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
-          if (firstLoad && IsArmor(item) && item.m_equiped) {
-            log($"Adding {item.m_shared.m_name} to initial armor list. Item not added to inventory");
-            if (initialEquippedArmor.Contains((item))) {
-              initialEquippedArmor.Add(item);
-            }
-            return false;
+      if (__instance.IsPlayerInventory() && item != null) {
+        Vector2i loc = new Vector2i(x, y);
+        if (firstLoad && isArmor(item) && item.m_equiped) {
+          if (!initialEquippedArmor.Contains((item))) {
+            initialEquippedArmor.Add(item);
           }
-          if (item.m_equiped && IsArmor(item) && Player.m_localPlayer != null) {
-            UnequipItem(Player.m_localPlayer, item);
-            Vector2i armorSlot = GetArmorSlot(item);
-            if (x == armorSlot.x && y == armorSlot.y) {
-              log($"Adding equipped item {item.m_shared.m_name} to armor slot.");
-              return true;
-            }
-            return false;
-          }
-          if (Player.m_localPlayer == null) {
-            log("Adding item during menu loading phase.");
+          return false;
+        }
+        if (item.m_equiped && isArmor(item) && Player.m_localPlayer != null) {
+          UnequipItem(Player.m_localPlayer, item);
+          Vector2i armorSlot = GetArmorSlot(item);
+          if (x == armorSlot.x && y == armorSlot.y) {
             return true;
           }
-          if (x < 5 && y == 4) {
-            return false;
-          }
-
+          return false;
+        }
+        if (Player.m_localPlayer == null) {
+          return true;
+        }
+        if (x < 5 && y == 4) {
+          return false;
         }
       }
       return true;
@@ -68,7 +63,7 @@ namespace ComfyQuickSlots {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Inventory), "MoveItemToThis", typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
     public static bool MoveItemToThisPrefix(Inventory __instance, ref bool __result, Inventory fromInventory, ItemDrop.ItemData item, int amount, int x, int y) {
-      if (__instance.m_name.Equals("ComfyQuickSlotsInventory")) {
+      if (__instance.IsPlayerInventory()) {
         if (x < 5 && y == 4) {
           return false;
         }
@@ -78,11 +73,10 @@ namespace ComfyQuickSlots {
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(Inventory), "FindEmptySlot")]
+    [HarmonyPatch(nameof(Inventory.FindEmptySlot))]
     public static bool FindEmptySlotPrefix(Inventory __instance, bool topFirst, ref Vector2i __result) {
-      if (__instance.m_name == "ComfyQuickSlotsInventory") {
+      if (__instance.IsPlayerInventory()) {
         __result = GetEmptyInventorySlot(__instance, topFirst);
-        log($"Found empty slot in ${__instance.m_name} at {__result.x},{__result.y}");
         return false;
       }
       return true;
@@ -91,8 +85,7 @@ namespace ComfyQuickSlots {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Inventory), "HaveEmptySlot")]
     public static bool HaveEmptySlotPrefix(Inventory __instance, ref bool __result) {
-      log("Checking have empty slots");
-      if (__instance.m_name == "ComfyQuickSlotsInventory") {
+      if (__instance.IsPlayerInventory()) {
         __result = HaveEmptyInventorySlot(__instance);
         return false;
       }

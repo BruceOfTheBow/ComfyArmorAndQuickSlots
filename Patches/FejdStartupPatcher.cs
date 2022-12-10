@@ -5,15 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
 
+using static ComfyQuickSlots.ComfyQuickSlots;
+
 namespace ComfyQuickSlots.Patches {
-    [HarmonyPatch(typeof(FejdStartup))]
-    public class FejdStartupPatcher {
+  [HarmonyPatch(typeof(FejdStartup))]
+  public class FejdStartupPatcher {
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(FejdStartup), "SetupCharacterPreview")]
+    [HarmonyPatch(nameof(FejdStartup.SetupCharacterPreview))]
     public static void FejdStartupSetupCharacterPreviewPrefix(FejdStartup __instance) {
-      ComfyQuickSlots.log("Resetting first load on character change.");
-      ComfyQuickSlots.initialEquippedArmor = new List<ItemDrop.ItemData>();
-      ComfyQuickSlots.firstLoad = false;
+      initialEquippedArmor = new List<ItemDrop.ItemData>();
+      firstLoad = false;
     }
   }
 }

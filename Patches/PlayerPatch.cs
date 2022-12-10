@@ -1,74 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using HarmonyLib;
+
+using static ComfyQuickSlots.ComfyQuickSlots;
 
 namespace ComfyQuickSlots {
 
-    [HarmonyPatch(typeof(Player))]
-    public static class PlayerPatch {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Player), "Awake")]
-        public static void PlayerAwakePrefix(ref Player __instance) {
-            __instance.m_inventory = new Inventory("ComfyQuickSlotsInventory", null, ComfyQuickSlots.columns, ComfyQuickSlots.rows);
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Player), "Load")]
-        public static void PlayerLoadPostFix(Player __instance) {
-            if (__instance.m_knownTexts.ContainsKey(ComfyQuickSlots.playerDataKey)) {
-                ComfyQuickSlots.log($"Loading comfy armor and quick slots data from {ComfyQuickSlots.playerDataKey}");
-                try {
-                    ZPackage pkg = new ZPackage(__instance.m_knownTexts[ComfyQuickSlots.playerDataKey]);
-                    __instance.GetInventory().Load(pkg);
-                    ComfyQuickSlots.EquipArmorInArmorSlots(__instance);
-                    __instance.GetInventory().Changed();
-                } catch(Exception e) {
-                    ComfyQuickSlots.log($"Caught exception{e}");
-                }
-            } else {
-                ComfyQuickSlots.log($"Initial load of ComfyQuickSlots. Checking for initial equipped armor pieces.");
-                ComfyQuickSlots.firstLoad = true;
-                foreach(ItemDrop.ItemData armorPiece in ComfyQuickSlots.initialEquippedArmor) {
-                    ComfyQuickSlots.log($"Equipping {armorPiece.m_shared.m_name} and moving to armor slot on initial load.");
-                    ComfyQuickSlots.UnequipItem(__instance, armorPiece);
-                    __instance.GetInventory().AddItem(armorPiece);
-                    __instance.EquipItem(armorPiece);
-                    Vector2i armorSlot = ComfyQuickSlots.GetArmorSlot(armorPiece);
-                    ComfyQuickSlots.MoveArmorItemToSlot(__instance, armorPiece, armorSlot.x, armorSlot.y);
-                    __instance.GetInventory().Changed();
-                }
-                // Removes armor from cache in case Player Load is called more than once on world entry
-                ComfyQuickSlots.log($"Player loaded in game or menu and armor equipped. Cached list cleared.");
-                ComfyQuickSlots.initialEquippedArmor = new List<ItemDrop.ItemData>();
-            }
-
-            foreach(ItemDrop.ItemData item in __instance.GetInventory().m_inventory) {
-                if(item.IsEquipable() && !ComfyQuickSlots.isArmor(item) && item.m_equiped) {
-                    __instance.EquipItem(item);
-                }
-            }
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Player), "Save")]
-        public static bool PlayerSavePrefix(Player __instance) {
-            ComfyQuickSlots.log($"Adding armor and quick slots data to save file as {ComfyQuickSlots.playerDataKey}.");
-            ComfyQuickSlots.firstLoad = false;
-            return ComfyQuickSlots.Save(__instance);
-        }
-        
-        // Prevents interaction with item stands and armor stands while item is equipping
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Player), "UseHotbarItem")]
-        public static bool UseHotBarItemPrefix(Player __instance, int index) {
-            ItemDrop.ItemData itemAt = __instance.m_inventory.GetItemAt(index - 1, 0);
-            if (__instance.IsEquipActionQueued(itemAt)) {
-                return false;
-            }
-            return true;
-        }
+  [HarmonyPatch(typeof(Player))]
+  public static class PlayerPatch {
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Player.Awake))]
+    public static void PlayerAwakePrefix(ref Player __instance) {
+      __instance.m_inventory = new Inventory("ComfyQuickSlotsInventory", null, columns, rows);
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Player.Load))]
+    public static void PlayerLoadPostFix(Player __instance) {
+      if (__instance.m_knownTexts.ContainsKey(playerDataKey)) {
+        ZPackage pkg = new ZPackage(__instance.m_knownTexts[playerDataKey]);
+        __instance.GetInventory().Load(pkg);
+        EquipArmorInArmorSlots(__instance);
+        __instance.GetInventory().Changed();
+      } else {
+        firstLoad = true;
+        foreach (ItemDrop.ItemData armorPiece in initialEquippedArmor) {
+          UnequipItem(__instance, armorPiece);
+          __instance.GetInventory().AddItem(armorPiece);
+          __instance.EquipItem(armorPiece);
+          Vector2i armorSlot = GetArmorSlot(armorPiece);
+          MoveArmorItemToSlot(__instance, armorPiece, armorSlot.x, armorSlot.y);
+          __instance.GetInventory().Changed();
+        }
+        initialEquippedArmor = new List<ItemDrop.ItemData>();
+      }
+
+      foreach (ItemDrop.ItemData item in __instance.GetInventory().m_inventory) {
+        if (item.IsEquipable() && !IsArmor(item) && item.m_equiped) {
+          __instance.EquipItem(item);
+        }
+      }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Player.Save))]
+    public static bool PlayerSavePrefix(Player __instance) {
+      firstLoad = false;
+      return Save(__instance);
+    }
+
+    // Prevents interaction with item stands and armor stands while item is equipping
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Player.UseHotbarItem))]
+    public static bool UseHotBarItemPrefix(Player __instance, int index) {
+      ItemDrop.ItemData itemAt = __instance.m_inventory.GetItemAt(index - 1, 0);
+      if (__instance.IsEquipActionQueued(itemAt)) {
+        return false;
+      }
+      return true;
+    }
+  }
 }
