@@ -35,10 +35,10 @@ namespace ComfyQuickSlots {
       if (item != null) {
         if (__instance.m_name == "ComfyQuickSlotsInventory") {
           Vector2i loc = new Vector2i(x, y);
-          //ComfyQuickSlots.log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
+          log($"Attempting to add item {item.m_shared.m_name} to {x},{y}. Is equipped? {item.m_equiped}. Local Player?{Player.m_localPlayer != null}. On Menu Load? {ComfyQuickSlots.onMenuLoad}");
           if (firstLoad && IsArmor(item) && item.m_equiped) {
             log($"Adding {item.m_shared.m_name} to initial armor list. Item not added to inventory");
-            if (initialEquippedArmor.Contains((item))) {
+            if (!initialEquippedArmor.Contains((item))) {
               initialEquippedArmor.Add(item);
             }
             return false;

@@ -23,6 +23,7 @@ namespace ComfyQuickSlots {
         __instance.GetInventory().Changed();
       } else {
         firstLoad = true;
+        ZLog.Log($"First load with {initialEquippedArmor.Count}");
         foreach (ItemDrop.ItemData armorPiece in initialEquippedArmor) {
           UnequipItem(__instance, armorPiece);
           __instance.GetInventory().AddItem(armorPiece);

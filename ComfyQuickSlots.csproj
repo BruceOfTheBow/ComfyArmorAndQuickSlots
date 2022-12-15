@@ -105,6 +105,7 @@
     <Compile Include="Patches\InventoryGridPatch.cs" />
     <Compile Include="Patches\InventoryGuiPatch.cs" />
     <Compile Include="PluginConfig.cs" />
+		<Compile Include="InventoryExtension.cs" />
     <Compile Include="InventoryLogger.cs" />
     <Compile Include="ComfyQuickSlots.cs" />
     <Compile Include="Common.cs" />
