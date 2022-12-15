@@ -27,7 +27,7 @@ namespace ComfyQuickSlots {
 
     public static readonly string PlayerInventoryName = "ComfyQuickSlotsInventory";
 
-    private static bool _debug = true;
+    private static bool _debug = false;
 
     static Assembly assem = typeof(ComfyQuickSlots).Assembly;
     public static string fpath = assem.Location;
