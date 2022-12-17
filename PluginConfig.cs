@@ -42,7 +42,7 @@ namespace ComfyQuickSlots {
             LogFilesPath = config.Bind("Logging", "logFilesPath", "ItemsOnDeath/", "Path to where logging of items on death are saved.");
 
             // Mod Support
-            SafeDeathSupport = config.Bind("_Global", "SafeDeathSupport", false, "Enable or disable support for the 'Safe Death' mod to prevent quickslot item removal.");
+            SafeDeathSupport = config.Bind("_Global", "SafeDeathSupport", false, "Enable or disable support for the 'Safe Death' mod. Will ignore ComfyQuickSlots Tombstone behaviour to prevent quickslot item removal.");
         }
     }
 
