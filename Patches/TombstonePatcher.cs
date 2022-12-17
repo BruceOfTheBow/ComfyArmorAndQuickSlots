@@ -19,6 +19,10 @@ namespace ComfyQuickSlots {
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Player.CreateTombStone))]
     public static void CreateTombStonePrefix(Player __instance) {
+      // Safe Death Mod Support
+      if (SafeDeathSupport.Value) {
+        return;
+      }
       // Log Items in tombstone on death for auditing and tracking purposes
       Directory.CreateDirectory(LogFilesPath.Value);
       string filename = __instance.GetPlayerID() + ".csv";
