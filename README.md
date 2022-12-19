@@ -8,7 +8,7 @@
 
 ### Thunderstore (manual)
 
-  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.0.9.zip`.
+  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.0.10.zip`.
   * Click "OK/Import local mod" on the pop-up for information.
 
 ## Features
@@ -40,6 +40,10 @@
   * Check out our community driven listing site at: [valheimlist.org](https://valheimlist.org/)
 
 ## Changelog
+
+### 1.0.10
+
+  * Added IsQuickSlot method for mod compatibility purposes.
 
 ### 1.0.9
 

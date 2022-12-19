@@ -17,7 +17,7 @@ namespace ComfyQuickSlots {
   public class ComfyQuickSlots : BaseUnityPlugin {
     public const string PluginGuid = "com.bruce.valheim.comfyquickslots";
     public const string PluginName = "ComfyQuickSlots";
-    public const string PluginVersion = "1.0.9";
+    public const string PluginVersion = "1.0.10";
 
     public const string playerDataKey = "ComfyQuickSlotsInventory";
     private static ConfigFile configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "ComfyQuickSlots.cfg"), true);
@@ -51,7 +51,12 @@ namespace ComfyQuickSlots {
     public static Vector2i shoulderSlot = new Vector2i(3, 4);
     public static Vector2i utilitySlot = new Vector2i(4, 4);
 
+    static Vector2i _quickSlot1 = new Vector2i(5, 4);
+    static Vector2i _quickSlot2 = new Vector2i(6, 4);
+    static Vector2i _quickSlot3 = new Vector2i(7, 4);
+
     public static List<Vector2i> armorSlots = new List<Vector2i>() { helmetSlot, chestSlot, legsSlot, shoulderSlot, utilitySlot };
+    static List<Vector2i> _quickSlots = new List<Vector2i>() { _quickSlot1, _quickSlot2, _quickSlot3 };
 
     public static bool firstLoad = false;
     public static bool onMenuLoad = false;
@@ -162,6 +167,12 @@ namespace ComfyQuickSlots {
 
     public static bool IsArmorSlot(Vector2i loc) {
       if (armorSlots.Contains(loc)) {
+        return true;
+      }
+      return false;
+    }
+    public static bool IsQuickSlot(Vector2i loc) {
+      if (_quickSlots.Contains(loc)) {
         return true;
       }
       return false;
