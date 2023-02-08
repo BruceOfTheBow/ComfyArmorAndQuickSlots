@@ -43,7 +43,7 @@
 
 ### 1.0.10
 
-  * Added IsQuickSlot method for mod compatibility purposes.
+  * Added IsQuickSlot method for mod compatibility purposes. Fixed fish bait return bug.
 
 ### 1.0.9
 

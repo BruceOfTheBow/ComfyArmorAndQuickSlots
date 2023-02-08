@@ -14,22 +14,6 @@ namespace ComfyQuickSlots {
   [HarmonyPatch(typeof(Inventory))]
   public static class InventoryPatch {
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(Inventory), "AddItem", typeof(GameObject), typeof(int))]
-    public static bool AddItemGameObjectPrefix(Inventory __instance, ref bool __result, GameObject prefab, int amount) {
-      if (__instance.m_name == "ComfyQuickSlotsInventory") {
-        ItemDrop.ItemData item = prefab.GetComponent<ItemDrop>().m_itemData;
-        if (HaveEmptyInventorySlot(__instance)) {
-          Vector2i emptySlot = GetEmptyInventorySlot(__instance, __instance.TopFirst(item));
-          __instance.AddItem(item, item.m_stack, emptySlot.x, emptySlot.y);
-          return true;
-        }
-        __result = false;
-        return false;
-      }
-      return true;
-    }
-
-    [HarmonyPrefix]
     [HarmonyPatch(typeof(Inventory), "AddItem", typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
     public static bool AddItemPositionPrefix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
       if (item != null) {
