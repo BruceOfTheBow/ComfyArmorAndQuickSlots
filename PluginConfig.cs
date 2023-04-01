@@ -11,6 +11,8 @@ namespace ComfyQuickSlots {
     public class PluginConfig {
         public static ConfigEntry<bool> IsModEnabled = default!;
 
+        public static ConfigEntry<bool> EnableQuickslots = default!;
+
         // QuickSlots
         public static ConfigEntry<KeyCode> QuickSlot1 = default!;
         public static ConfigEntry<KeyCode> QuickSlot2 = default!;
@@ -28,9 +30,12 @@ namespace ComfyQuickSlots {
             IsModEnabled = config.Bind("_Global", "isModEnabled", true, "Globally enable or disable this mod.");
 
             // QuickSlots
-            QuickSlot1 = config.Bind("QuickSlot1", "quickSlot1Use", KeyCode.Z, "Hot key for item use in quick slot 1");
-            QuickSlot2 = config.Bind("QuickSlot2", "quickSlot2Use", KeyCode.V, "Hot key for item use in quick slot 2");
-            QuickSlot3 = config.Bind("QuickSlot3", "quickSlot3Use", KeyCode.B, "Hot key for item use in quick slot 3");
+            QuickSlot1 = config.Bind("QuickSlotBinding", "quickSlot1Use", KeyCode.Z, "Hot key for item use in quick slot 1");
+            QuickSlot2 = config.Bind("QuickSlotBinding", "quickSlot2Use", KeyCode.V, "Hot key for item use in quick slot 2");
+            QuickSlot3 = config.Bind("QuickSlotBinding", "quickSlot3Use", KeyCode.B, "Hot key for item use in quick slot 3");
+
+            //Quick Slot Enable
+            EnableQuickslots= config.Bind("QuickSlotToggles", "quickSlotEnable", true, "Enables or disables quickslots.");
 
             // Quick Slots Hotkeybar Positioning
             QuickSlotsAnchor = config.Bind("QuickSlotsAnchor", "quickSlotsAnchor", TextAnchor.LowerLeft, "The point on the HUD to anchor the Quick Slots bar. Changing this also changes the pivot of the Quick Slots to that corner.");

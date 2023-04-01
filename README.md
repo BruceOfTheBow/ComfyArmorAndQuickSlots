@@ -8,7 +8,7 @@
 
 ### Thunderstore (manual)
 
-  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.1.0.zip`.
+  * Go to Settings > Import local mod > Select `ComfyQuickSlots_v1.2.0.zip`.
   * Click "OK/Import local mod" on the pop-up for information.
 
 ## Features
@@ -40,6 +40,10 @@
   * Check out our community driven listing site at: [valheimlist.org](https://valheimlist.org/)
 
 ## Changelog
+
+### 1.2.0
+
+  * Added enable/disable toggle for quickslots. Enabled by default. No restarts required.
 
 ### 1.1.0
 
