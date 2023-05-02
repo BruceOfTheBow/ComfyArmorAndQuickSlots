@@ -20,7 +20,7 @@ namespace ComfyQuickSlots.Patches {
     public static void AwakePostfix(Hud __instance) {
       hotkeyBar = __instance.GetComponentInChildren<HotkeyBar>();
 
-      if (IsModEnabled.Value && __instance.transform.Find("QuickSlotsHotkeyBar") == null && EnableQuickslots.Value) {
+      if (IsModEnabled.Value && QuickSlotsHotkeyBar == null && EnableQuickslots.Value) {
         QuickSlotsHotkeyBar = UnityEngine.Object.Instantiate(hotkeyBar.gameObject, __instance.m_rootObject.transform, true);
         QuickSlotsHotkeyBar.name = "QuickSlotsHotkeyBar";
         QuickSlotsHotkeyBar.GetComponent<HotkeyBar>().m_selected = -1;
