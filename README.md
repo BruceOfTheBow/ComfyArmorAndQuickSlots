@@ -41,6 +41,10 @@
 
 ## Changelog
 
+### 1.2.1
+
+  * Minor performance fixes.
+
 ### 1.2.0
 
   * Added enable/disable toggle for quickslots. Enabled by default. No restarts required.

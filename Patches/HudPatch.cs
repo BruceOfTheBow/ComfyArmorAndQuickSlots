@@ -13,10 +13,12 @@ using static ComfyQuickSlots.HotkeyBarPatch;
 namespace ComfyQuickSlots.Patches {
   [HarmonyPatch(typeof(Hud))]
   public static class Hud_Awake_Patch {
+    private static HotkeyBar hotkeyBar;
+
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Hud.Awake))]
     public static void AwakePostfix(Hud __instance) {
-      HotkeyBar hotkeyBar = __instance.GetComponentInChildren<HotkeyBar>();
+      hotkeyBar = __instance.GetComponentInChildren<HotkeyBar>();
 
       if (IsModEnabled.Value && __instance.transform.Find("QuickSlotsHotkeyBar") == null && EnableQuickslots.Value) {
         QuickSlotsHotkeyBar = UnityEngine.Object.Instantiate(hotkeyBar.gameObject, __instance.m_rootObject.transform, true);
@@ -33,9 +35,7 @@ namespace ComfyQuickSlots.Patches {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Hud.Update))]
     public static void UpdatePostfix(Hud __instance) {
-      HotkeyBar hotkeyBar = __instance.GetComponentInChildren<HotkeyBar>();
-
-      if (IsModEnabled.Value && hotkeyBar.transform.parent.Find("QuickSlotsHotkeyBar") == null && EnableQuickslots.Value) {
+      if (IsModEnabled.Value && QuickSlotsHotkeyBar == null && EnableQuickslots.Value) {
         QuickSlotsHotkeyBar = UnityEngine.Object.Instantiate(hotkeyBar.gameObject, __instance.m_rootObject.transform, true);
         QuickSlotsHotkeyBar.name = "QuickSlotsHotkeyBar";
         HotkeyBar hkb = QuickSlotsHotkeyBar.GetComponent<HotkeyBar>();
