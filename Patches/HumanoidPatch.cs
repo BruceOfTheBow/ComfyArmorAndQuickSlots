@@ -44,7 +44,7 @@ namespace ComfyQuickSlots {
     [HarmonyPatch(nameof(Humanoid.EquipItem))]
     public static void EquipItemPostfix(Humanoid __instance, ItemDrop.ItemData item) {
       if (__instance != null && item != null) {
-        log($"Item equipped {item.m_equiped}");
+        log($"Item equipped {item.m_equipped}");
         __instance.GetInventory().Changed();
       }
     }
@@ -53,7 +53,7 @@ namespace ComfyQuickSlots {
     [HarmonyPatch(nameof(Humanoid.UnequipItem))]
     public static bool UnequipItemPrefix(Humanoid __instance, ItemDrop.ItemData item, bool triggerEquipEffects) {
       if (item != null) {
-        if (IsArmor(item) && item.m_equiped) {
+        if (IsArmor(item) && item.m_equipped) {
           if (!HaveEmptyInventorySlot(__instance.GetInventory())) {
             log("No empty slots found. Will not unequip item.");
             __instance.Message(MessageHud.MessageType.Center, "Inventory full. Item not unequipped.");

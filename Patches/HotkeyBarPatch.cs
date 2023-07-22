@@ -80,7 +80,7 @@ namespace ComfyQuickSlots {
           }
         }
 
-        element.m_equiped.SetActive(itemData.m_equiped);
+        element.m_equiped.SetActive(itemData.m_equipped);
         element.m_queued.SetActive(player.IsEquipActionQueued(itemData));
         if (itemData.m_shared.m_maxStackSize > 1) {
           element.m_amount.gameObject.SetActive(true);

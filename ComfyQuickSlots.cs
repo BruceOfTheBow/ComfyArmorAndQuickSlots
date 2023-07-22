@@ -17,7 +17,7 @@ namespace ComfyQuickSlots {
   public class ComfyQuickSlots : BaseUnityPlugin {
     public const string PluginGuid = "com.bruce.valheim.comfyquickslots";
     public const string PluginName = "ComfyQuickSlots";
-    public const string PluginVersion = "1.2.1";
+    public const string PluginVersion = "1.3.0";
 
     public const string playerDataKey = "ComfyQuickSlotsInventory";
     private static ConfigFile configFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "ComfyQuickSlots.cfg"), true);
@@ -182,35 +182,35 @@ namespace ComfyQuickSlots {
     public static bool UnequipItem(Humanoid player, ItemDrop.ItemData item) {
       if (player.m_helmetItem == item) {
         player.m_helmetItem = null;
-        item.m_equiped = false;
+        item.m_equipped = false;
         player.SetupEquipment();
         player.TriggerEquipEffect(item);
         return true;
       }
       if (player.m_chestItem == item) {
         player.m_chestItem = null;
-        item.m_equiped = false;
+        item.m_equipped = false;
         player.SetupEquipment();
         player.TriggerEquipEffect(item);
         return true;
       }
       if (player.m_legItem == item) {
         player.m_legItem = null;
-        item.m_equiped = false;
+        item.m_equipped = false;
         player.SetupEquipment();
         player.TriggerEquipEffect(item);
         return true;
       }
       if (player.m_shoulderItem == item) {
         player.m_shoulderItem = null;
-        item.m_equiped = false;
+        item.m_equipped = false;
         player.SetupEquipment();
         player.TriggerEquipEffect(item);
         return true;
       }
       if (player.m_utilityItem == item) {
         player.m_utilityItem = null;
-        item.m_equiped = false;
+        item.m_equipped = false;
         player.SetupEquipment();
         player.TriggerEquipEffect(item);
         return true;
@@ -231,7 +231,7 @@ namespace ComfyQuickSlots {
         humanoid.m_utilityItem = item;
       }
       log($"Equipped {item.m_shared.m_name}");
-      item.m_equiped = true;
+      item.m_equipped = true;
       humanoid.SetupEquipment();
       humanoid.TriggerEquipEffect(item);
     }
@@ -392,7 +392,7 @@ namespace ComfyQuickSlots {
     }
 
     public static bool IsSimilarItemEquipped(ItemDrop.ItemData item) {
-      foreach (ItemDrop.ItemData itemCheck in Player.m_localPlayer.GetInventory().GetEquipedtems()) {
+      foreach (ItemDrop.ItemData itemCheck in Player.m_localPlayer.GetInventory().GetEquippedItems()) {
         if (item.m_shared.m_name.Equals(itemCheck.m_shared.m_name)) {
           return true;
         }

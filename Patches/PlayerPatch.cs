@@ -10,7 +10,9 @@ namespace ComfyQuickSlots {
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Player.Awake))]
     public static void PlayerAwakePrefix(ref Player __instance) {
-      __instance.m_inventory = new Inventory("ComfyQuickSlotsInventory", null, columns, rows);
+      __instance.m_inventory.m_name = "ComfyQuickSlotsInventory";
+      __instance.m_inventory.m_height = rows;
+      __instance.m_inventory.m_width = columns;
     }
 
     [HarmonyPostfix]
@@ -36,7 +38,7 @@ namespace ComfyQuickSlots {
       }
 
       foreach (ItemDrop.ItemData item in __instance.GetInventory().m_inventory) {
-        if (item.IsEquipable() && !IsArmor(item) && item.m_equiped) {
+        if (item.IsEquipable() && !IsArmor(item) && item.m_equipped) {
           __instance.EquipItem(item);
         }
       }

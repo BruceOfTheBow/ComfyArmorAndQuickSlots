@@ -36,13 +36,13 @@ namespace ComfyQuickSlots {
     public static bool AddItemPositionPrefix(Inventory __instance, ItemDrop.ItemData item, int amount, int x, int y) {
       if (__instance.IsPlayerInventory() && item != null) {
         Vector2i loc = new Vector2i(x, y);
-        if (firstLoad && isArmor(item) && item.m_equiped) {
+        if (firstLoad && isArmor(item) && item.m_equipped) {
           if (!initialEquippedArmor.Contains((item))) {
             initialEquippedArmor.Add(item);
           }
           return false;
         }
-        if (item.m_equiped && isArmor(item) && Player.m_localPlayer != null) {
+        if (item.m_equipped && isArmor(item) && Player.m_localPlayer != null) {
           UnequipItem(Player.m_localPlayer, item);
           Vector2i armorSlot = GetArmorSlot(item);
           if (x == armorSlot.x && y == armorSlot.y) {

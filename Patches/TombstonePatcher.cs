@@ -31,7 +31,7 @@ namespace ComfyQuickSlots {
       Container graveContainer = additionalTombstone.GetComponent<Container>();
 
       that.UnequipAllItems();
-      Func<ItemDrop.ItemData, bool> predicate = new Func<ItemDrop.ItemData, bool>(item => item.m_gridPos.y >= 4 && !item.m_equiped);
+      Func<ItemDrop.ItemData, bool> predicate = new Func<ItemDrop.ItemData, bool>(item => item.m_gridPos.y >= 4 && !item.m_equipped);
       foreach (var item in that.GetInventory().GetAllItems().Where(predicate).ToArray()) {
         if (item.m_gridPos.y >= 4) {
           graveContainer.GetInventory().AddItem(item);

@@ -29,7 +29,7 @@ namespace ComfyQuickSlots.Patches {
     [HarmonyPatch(nameof(InventoryGui.OnCraftPressed))]
     public static bool OnCraftPressedPrefix(ref InventoryGui __instance) {
       if (__instance.m_selectedRecipe.Value != null) {
-        if (__instance.m_selectedRecipe.Value.m_equiped && !HaveEmptyInventorySlot(Player.m_localPlayer.GetInventory()) && ItemCountInInventory(__instance.m_selectedRecipe.Value) == 1) {
+        if (__instance.m_selectedRecipe.Value.m_equipped && !HaveEmptyInventorySlot(Player.m_localPlayer.GetInventory()) && ItemCountInInventory(__instance.m_selectedRecipe.Value) == 1) {
           Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Inventory full. Make room to upgrade equipped item.");
           return false;
         }
